@@ -10,13 +10,13 @@ class Snake():
         self.length = Settings.snake_init_length
         self.direction = 0  # 1 = up, 2 = down, 3 = left, 4 = right
 
-    def draw_at(self, x, y):
-        rect = pygame.Rect(x, y, Settings.snake_size, Settings.snake_size)
-        self.screen.fill(Settings.snake_color, rect)
-
-    def update(self):
+    def draw(self):
         for i in range(self.length):
-            self.draw_at(self.x[i], self.y[i])
+            rect = pygame.Rect(self.x[i], self.y[i], Settings.snake_size, Settings.snake_size)
+            self.screen.fill(Settings.snake_color, rect)
+        
+    def update(self):
+        self.draw()
         if self.direction == 0:
             return
         for i in range(self.length - 1, 0, -1):
@@ -31,6 +31,11 @@ class Snake():
             self.x[0] -= Settings.snake_speed
         elif self.direction == 4:
             self.x[0] += Settings.snake_speed
+        self.check_bounds()
+            
+    def check_bounds(self):
+        if self.x[0] < -Settings.snake_size or self.x[0] > Settings.width or self.y[0] < -Settings.snake_size or self.y[0] > Settings.height:
+            self.direction = 0
 
     def grow(self):
         for _ in range(Settings.snake_grow_rate):
