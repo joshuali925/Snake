@@ -29,7 +29,7 @@ class Food():
         self.screen.fill(Settings.food_color, self.rect)
 
     def update(self):
-        if self.snake.x[0] == self.x and self.snake.y[0] == self.y:
+        if self.snake.body[0].x == self.x and self.snake.body[0].y == self.y:
             self.snake.grow()
             self.x = self.random_x()
             self.y = self.random_y()
