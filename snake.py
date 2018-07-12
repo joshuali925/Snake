@@ -5,14 +5,13 @@ from settings import Settings
 class Snake():
     def __init__(self, screen):
         self.screen = screen
-        self.x = [screen.get_rect().centerx] * 5
-        self.y = [screen.get_rect().centery] * 5
-
+        self.x = [screen.get_rect().centerx] * Settings.snake_init_length
+        self.y = [screen.get_rect().centery] * Settings.snake_init_length
+        self.length = Settings.snake_init_length
         self.direction = 0  # 1 = up, 2 = down, 3 = left, 4 = right
-        self.length = len(self.x)
 
     def draw_at(self, x, y):
-        rect = pygame.Rect(x, y, Settings.snake_length, Settings.snake_length)
+        rect = pygame.Rect(x, y, Settings.snake_size, Settings.snake_size)
         self.screen.fill(Settings.snake_color, rect)
 
     def update(self):
@@ -33,6 +32,7 @@ class Snake():
             self.x[0] += Settings.snake_speed
 
     def grow(self, x, y):
-        self.x.insert(0, x)
-        self.y.insert(0, y)
-        self.length += 1
+        for _ in range(Settings.snake_grow_rate):
+            self.x.insert(0, x)
+            self.y.insert(0, y)
+            self.length += 1

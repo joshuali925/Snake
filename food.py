@@ -10,23 +10,26 @@ class Food():
         self.x = self.random_x()
         self.y = self.random_y()
         self.rect = pygame.Rect(self.x, self.y,
-                           Settings.food_size, Settings.food_size)
+                                Settings.food_size, Settings.food_size)
 
+    # random returns a point snaps to the grid (reachable for the snake)
     def random_x(self):
-        return random.randint(Settings.food_size, Settings.width - Settings.food_size)
+        x = random.randint(Settings.food_size,
+                           Settings.width - Settings.food_size)
+        return (x - self.screen.get_rect().centerx) // Settings.snake_speed * Settings.snake_speed + self.screen.get_rect().centerx
 
     def random_y(self):
-        return random.randint(Settings.food_size, Settings.height - Settings.food_size)
-
+        y = random.randint(Settings.food_size,
+                           Settings.height - Settings.food_size)
+        return (y - self.screen.get_rect().centery) // Settings.snake_speed * Settings.snake_speed + self.screen.get_rect().centery
+        
     def draw(self):
-        self.rect = pygame.Rect(self.x, self.y,
-                           Settings.food_size, Settings.food_size)
+        self.rect.x = self.x
+        self.rect.y = self.y
         self.screen.fill(Settings.food_color, self.rect)
-        
-        
+
     def update(self):
-        snake_rect = pygame.Rect(self.snake.x[0], self.snake.y[0], Settings.snake_length, Settings.snake_length)
-        if snake_rect.colliderect(self.rect):
+        if self.snake.x[0] == self.x and self.snake.y[0] == self.y:
             self.snake.grow(self.x, self.y)
             self.x = self.random_x()
             self.y = self.random_y()
