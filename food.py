@@ -30,7 +30,7 @@ class Food():
 
     def update(self):
         if self.snake.x[0] == self.x and self.snake.y[0] == self.y:
-            self.snake.grow(self.x, self.y)
+            self.snake.grow()
             self.x = self.random_x()
             self.y = self.random_y()
         self.draw()

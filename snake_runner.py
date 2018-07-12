@@ -14,7 +14,7 @@ def run():
     
     food = Food(screen, snake)
     while True:
-        time.sleep(0.1)
+        time.sleep(0.05)
         gf.check_events(screen, snake)
         gf.update(screen, snake, food)
         

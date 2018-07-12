@@ -6,7 +6,7 @@ class Settings():
 
     snake_size = 10
     snake_color = (60, 60, 60)
-    snake_speed = snake_size
+    snake_speed = 11
     snake_grow_rate = 3
     snake_init_length = 5
 

@@ -6,13 +6,13 @@ from settings import Settings
 def check_events(screen, snake):
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_UP and snake.direction != 2:
                 snake.direction = 1
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN and snake.direction != 1:
                 snake.direction = 2
-            elif event.key == pygame.K_LEFT:
+            elif event.key == pygame.K_LEFT and snake.direction != 4:
                 snake.direction = 3
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT and snake.direction != 3:
                 snake.direction = 4
             elif event.key == pygame.K_q:
                 sys.exit()
@@ -22,6 +22,6 @@ def check_events(screen, snake):
 
 def update(screen, snake, food):
     screen.fill(Settings.bg_color)
-    snake.update()
     food.update()
+    snake.update()
     pygame.display.flip()

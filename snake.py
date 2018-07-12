@@ -22,6 +22,7 @@ class Snake():
         for i in range(self.length - 1, 0, -1):
             self.x[i] = self.x[i - 1]
             self.y[i] = self.y[i - 1]
+        # 4=3, 3=2, 2=1, 1=0, modify 0
         if self.direction == 1:
             self.y[0] -= Settings.snake_speed
         elif self.direction == 2:
@@ -31,8 +32,8 @@ class Snake():
         elif self.direction == 4:
             self.x[0] += Settings.snake_speed
 
-    def grow(self, x, y):
+    def grow(self):
         for _ in range(Settings.snake_grow_rate):
-            self.x.insert(0, x)
-            self.y.insert(0, y)
-            self.length += 1
+            self.x.append(self.x[-1])
+            self.y.append(self.y[-1])
+        self.length += Settings.snake_grow_rate
