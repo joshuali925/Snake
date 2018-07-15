@@ -7,30 +7,24 @@ class Food():
     def __init__(self, screen, snake):
         self.screen = screen
         self.snake = snake
-        self.x = self.random_x()
-        self.y = self.random_y()
-        self.rect = pygame.Rect(self.x, self.y,
-                                Settings.food_size, Settings.food_size)
+        self.rect = pygame.Rect(0, 0, Settings.food_size, Settings.food_size)
+        self.set_random_point()
 
     # random returns a point snaps to the grid (reachable for the snake)
-    def random_x(self):
-        x = random.randint(Settings.food_size,
-                           Settings.width - Settings.food_size)
-        return (x - self.screen.get_rect().centerx) // Settings.snake_speed * Settings.snake_speed + self.screen.get_rect().centerx
-
-    def random_y(self):
-        y = random.randint(Settings.food_size,
-                           Settings.height - Settings.food_size)
-        return (y - self.screen.get_rect().centery) // Settings.snake_speed * Settings.snake_speed + self.screen.get_rect().centery
-        
-    def draw(self):
-        self.rect.x = self.x
-        self.rect.y = self.y
-        self.screen.fill(Settings.food_color, self.rect)
+    def set_random_point(self):
+        if Settings.num_points_reachable == self.snake.length:
+            return
+        n = random.randint(0, Settings.num_points_reachable - 1)
+        x_i = n // len(Settings.all_x)
+        y_i = n % len(Settings.all_y)
+        x, y = Settings.all_x[x_i], Settings.all_y[y_i]
+        if self.snake.at_point(x, y):
+            self.set_random_point()
+        else:
+            self.rect.x, self.rect.y = x, y
 
     def update(self):
-        if self.snake.body[0].x == self.x and self.snake.body[0].y == self.y:
+        if self.snake.head_at_point(self.rect.x, self.rect.y):
             self.snake.grow()
-            self.x = self.random_x()
-            self.y = self.random_y()
-        self.draw()
+            self.set_random_point()
+        self.screen.fill(Settings.food_color, self.rect)

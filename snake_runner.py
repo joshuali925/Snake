@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from snake import Snake
 from food import Food
+from ai import Ai
 
 
 def check_events(screen, snake):
@@ -17,31 +18,45 @@ def check_events(screen, snake):
                 snake.direction = 3
             elif event.key == pygame.K_RIGHT and snake.direction != 3:
                 snake.direction = 4
+            elif event.key == pygame.K_p:
+                snake.direction = 0
             elif event.key == pygame.K_q:
                 sys.exit()
         elif event.type == pygame.QUIT:
             sys.exit()
 
 
-def update(screen, snake, food):
+def update(screen, snake, food, ai):
     screen.fill(Settings.bg_color)
+    ai.update()
     food.update()
     snake.update()
     pygame.display.flip()
+
+def on_init(screen):
+    for x in range(Settings.snake_speed, Settings.width, Settings.snake_speed):
+        Settings.all_x.append((x - screen.get_rect().centerx) // Settings.snake_speed *
+                            Settings.snake_speed + screen.get_rect().centerx)
+    for y in range(Settings.snake_speed, Settings.height, Settings.snake_speed):
+        Settings.all_y.append((y - screen.get_rect().centery) // Settings.snake_speed *
+                            Settings.snake_speed + screen.get_rect().centery)
+    Settings.num_points_reachable = len(Settings.all_x) * len(Settings.all_y)
 
 
 def run():
     pygame.init()
     screen = pygame.display.set_mode(Settings.resolution)
     pygame.display.set_caption('Snake')
+    on_init(screen)
 
     snake = Snake(screen)
     food = Food(screen, snake)
+    ai = Ai(screen, snake, food)
     
     while True:
-        time.sleep(0.05)
         check_events(screen, snake)
-        update(screen, snake, food)
+        update(screen, snake, food, ai)
+        time.sleep(0.05)
 
 
 run()
