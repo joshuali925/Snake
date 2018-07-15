@@ -11,6 +11,7 @@ class Snake():
                                          Settings.snake_size, Settings.snake_size))
         self.length = Settings.snake_init_length
         self.direction = 0  # 1 = up, 2 = down, 3 = left, 4 = right, 0 = stop
+        self.moves = [0]
 
     def draw(self):
         for i in range(1, self.length):
@@ -19,31 +20,29 @@ class Snake():
 
     def update(self):
         self.draw()
+        self.direction = self.moves.pop(0) if self.moves else self.direction
         if self.direction == 0:
             return
-        self.check_bounds()
         # 4=3, 3=2, 2=1, 1=0, modify 0
+        self.check_bounds()
         for i in range(self.length - 1, 0, -1):
             self.body[i].x = self.body[i - 1].x
             self.body[i].y = self.body[i - 1].y
-        if self.direction == 1:
-            self.body[0].y -= Settings.snake_speed
-        elif self.direction == 2:
-            self.body[0].y += Settings.snake_speed
-        elif self.direction == 3:
-            self.body[0].x -= Settings.snake_speed
-        elif self.direction == 4:
-            self.body[0].x += Settings.snake_speed
+        x, y = self.move(self.body[0].x, self.body[0].y, self.direction)
+        self.body[0].x, self.body[0].y = x, y
 
     def check_bounds(self):
         if self.body[0].y <= Settings.all_y[0] and self.direction == 1:
             self.direction = 3
-        if self.body[0].y >= Settings.all_y[-1] and self.direction == 2:
+        elif self.body[0].y >= Settings.all_y[-1] and self.direction == 2:
             self.direction = 4
-        if self.body[0].x <= Settings.all_x[0] and self.direction == 3:
+        elif self.body[0].x <= Settings.all_x[0] and self.direction == 3:
             self.direction = 2
-        if self.body[0].x >= Settings.all_x[-1] and self.direction == 4:
+        elif self.body[0].x >= Settings.all_x[-1] and self.direction == 4:
             self.direction = 1
+        else:
+            return False
+        return True
 
     def grow(self):
         for _ in range(Settings.snake_grow_rate):
@@ -59,3 +58,31 @@ class Snake():
     
     def head_at_point(self, x, y):
         return self.body[0].x == x and self.body[0].y == y
+    
+    def move(self, x, y, direction):
+        if direction == 1:
+            y -= Settings.snake_speed
+        elif direction == 2:
+            y += Settings.snake_speed
+        elif direction == 3:
+            x -= Settings.snake_speed
+        elif direction == 4:
+            x += Settings.snake_speed
+        return (x, y)
+        
+    def can_move(self, direction):
+        x, y = self.move(self.body[0].x, self.body[0].y, direction)
+        return x >= Settings.all_x[0] and x <= Settings.all_x[-1] and y >= Settings.all_y[0] and y <= Settings.all_y[-1] and not self.at_point(x, y)
+        
+    def movable_directions(self):
+        direction = []
+        for i in range(1, 5):
+            if self.can_move(i):
+                direction.append(i)
+        return direction
+        
+    def get_head_position(self):
+        return self.body[0].x, self.body[0].y
+        
+    def get_tail_position(self):
+        return self.body[-1].x, self.body[-1].y

@@ -9,6 +9,8 @@ class Food():
         self.snake = snake
         self.rect = pygame.Rect(0, 0, Settings.food_size, Settings.food_size)
         self.set_random_point()
+        self.ai = None
+        self.new_food = False
 
     # random returns a point snaps to the grid (reachable for the snake)
     def set_random_point(self):
@@ -24,7 +26,14 @@ class Food():
             self.rect.x, self.rect.y = x, y
 
     def update(self):
+        if self.new_food is True:
+            self.ai.set_new_path()
+            self.new_food = False
         if self.snake.head_at_point(self.rect.x, self.rect.y):
-            self.snake.grow()
             self.set_random_point()
+            self.snake.grow()
+            self.new_food = True
         self.screen.fill(Settings.food_color, self.rect)
+
+    def get_position(self):
+        return self.rect.x, self.rect.y

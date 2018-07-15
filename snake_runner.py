@@ -52,6 +52,8 @@ def run():
     snake = Snake(screen)
     food = Food(screen, snake)
     ai = Ai(screen, snake, food)
+    food.ai = ai
+    
     
     while True:
         check_events(screen, snake)
