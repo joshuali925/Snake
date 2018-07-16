@@ -11,7 +11,7 @@ class Snake():
                                          Settings.snake_size, Settings.snake_size))
         self.length = Settings.snake_init_length
         self.direction = 0  # 1 = up, 2 = down, 3 = left, 4 = right, 0 = stop
-        self.moves = [0]
+        self.moves = []
 
     def draw(self):
         for i in range(1, self.length):
@@ -19,17 +19,18 @@ class Snake():
         self.screen.fill(Settings.snake_head_color, self.body[0])
 
     def update(self):
+        self.direction = self.moves.pop(0) if len(
+            self.moves) > 0 else self.direction
+        if self.direction != 0:
+            self.check_bounds()
+            for i in range(self.length - 1, 0, -1):
+                self.body[i].x = self.body[i - 1].x
+                self.body[i].y = self.body[i - 1].y
+            x, y = self.move(self.body[0].x, self.body[0].y, self.direction)
+            self.body[0].x, self.body[0].y = x, y
+        else:
+            Settings.ai.set_new_path()
         self.draw()
-        self.direction = self.moves.pop(0) if self.moves else self.direction
-        if self.direction == 0:
-            return
-        # 4=3, 3=2, 2=1, 1=0, modify 0
-        self.check_bounds()
-        for i in range(self.length - 1, 0, -1):
-            self.body[i].x = self.body[i - 1].x
-            self.body[i].y = self.body[i - 1].y
-        x, y = self.move(self.body[0].x, self.body[0].y, self.direction)
-        self.body[0].x, self.body[0].y = x, y
 
     def check_bounds(self):
         if self.body[0].y <= Settings.all_y[0] and self.direction == 1:
@@ -55,10 +56,10 @@ class Snake():
             if rect.x == x and rect.y == y:
                 return True
         return False
-    
+
     def head_at_point(self, x, y):
         return self.body[0].x == x and self.body[0].y == y
-    
+
     def move(self, x, y, direction):
         if direction == 1:
             y -= Settings.snake_speed
@@ -69,20 +70,20 @@ class Snake():
         elif direction == 4:
             x += Settings.snake_speed
         return (x, y)
-        
-    def can_move(self, direction):
-        x, y = self.move(self.body[0].x, self.body[0].y, direction)
-        return x >= Settings.all_x[0] and x <= Settings.all_x[-1] and y >= Settings.all_y[0] and y <= Settings.all_y[-1] and not self.at_point(x, y)
-        
-    def movable_directions(self):
-        direction = []
-        for i in range(1, 5):
-            if self.can_move(i):
-                direction.append(i)
-        return direction
-        
+
+    def can_move(self, x, y, direction):
+        next_x, next_y = self.move(x, y, direction)
+        return next_x >= Settings.all_x[0] and next_x <= Settings.all_x[-1] and next_y >= Settings.all_y[0] and next_y <= Settings.all_y[-1] and not self.at_point(next_x, next_y)
+
+    def movable_directions(self, x, y):
+        directions = []
+        for d in range(1, 5):
+            if self.can_move(x, y, d):
+                directions.append(d)
+        return directions
+
     def get_head_position(self):
         return self.body[0].x, self.body[0].y
-        
+
     def get_tail_position(self):
         return self.body[-1].x, self.body[-1].y

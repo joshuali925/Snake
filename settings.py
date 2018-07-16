@@ -5,10 +5,10 @@ class Settings():
     resolution = width, height
     bg_color = (230, 230, 230)
 
-    snake_size = 10
+    snake_size = 20
     snake_color = (60, 60, 60)
     snake_head_color = (0, 0, 255)
-    snake_speed = 11
+    snake_speed = 21
     snake_grow_rate = 3
     snake_init_length = 5
 
@@ -19,3 +19,4 @@ class Settings():
     all_x = []
     all_y = []
     num_points_reachable = 0
+    ai = None
