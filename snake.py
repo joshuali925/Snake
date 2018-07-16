@@ -19,19 +19,20 @@ class Snake():
         self.screen.fill(Settings.snake_head_color, self.body[0])
 
     def update(self):
+        Settings.ai.set_new_path()
         self.direction = self.moves.pop(0) if len(self.moves) > 0 else 0
         if self.direction != 0:
             self.check_bounds()
-            for i in range(self.length - 1, 0, -1):
-                self.body[i].x = self.body[i - 1].x
-                self.body[i].y = self.body[i - 1].y
-            x, y = self.get_move_result(
-                self.body[0].x, self.body[0].y, self.direction)
-            self.body[0].x, self.body[0].y = x, y
-        # else:
-        #     Settings.ai.set_new_path()
-        Settings.ai.set_new_path()
+            self.move(self.direction)
         self.draw()
+    
+    def move(self, direction):
+        for i in range(self.length - 1, 0, -1):
+            self.body[i].x = self.body[i - 1].x
+            self.body[i].y = self.body[i - 1].y
+        x, y = self.get_move_result(
+            self.body[0].x, self.body[0].y, direction)
+        self.body[0].x, self.body[0].y = x, y
 
     def check_bounds(self):
         if self.body[0].y <= Settings.all_y[0] and self.direction == 1:

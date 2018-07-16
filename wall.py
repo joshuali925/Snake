@@ -9,9 +9,9 @@ class Wall():
         max_x, max_y = Settings.all_x[-1], Settings.all_y[-1]
         self.walls = []
         self.walls.append(pygame.Rect(
-            min_x - Settings.wall_size - 1, min_y - Settings.wall_size - 1, max_x - min_x + Settings.snake_speed + Settings.wall_size * 2 + 1, Settings.wall_size))
+            min_x - Settings.wall_size - 1, min_y - Settings.wall_size - 1, max_x - min_x + Settings.snake_speed + Settings.wall_size * 2, Settings.wall_size))
         self.walls.append(pygame.Rect(
-            min_x - Settings.wall_size - 1, min_y - Settings.wall_size - 1, Settings.wall_size, max_y - min_y + Settings.snake_speed + Settings.wall_size * 2 + 1))
+            min_x - Settings.wall_size - 1, min_y - Settings.wall_size - 1, Settings.wall_size, max_y - min_y + Settings.snake_speed + Settings.wall_size * 2))
         self.walls.append(pygame.Rect(
             max_x + Settings.snake_speed, min_y - Settings.wall_size, Settings.wall_size, max_y - min_y + Settings.snake_speed + Settings.wall_size * 2))
         self.walls.append(pygame.Rect(

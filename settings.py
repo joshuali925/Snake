@@ -1,11 +1,11 @@
 class Settings():
     # all integers
-    width = 320
-    height = 320
+    width = 590
+    height = 390
     resolution = width, height
     bg_color = (230, 230, 230)
 
-    snake_size = 20
+    snake_size = 10
     snake_color = (60, 60, 60)
     snake_head_color = (0, 0, 255)
     snake_speed = snake_size + 1

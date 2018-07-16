@@ -52,16 +52,19 @@ def run():
     pygame.display.set_caption('Snake')
     generate_all_positions(screen)
 
+    wall = Wall(screen)
     snake = Snake(screen)
     food = Food(screen, snake)
     ai = Ai(screen, snake, food)
     Settings.ai = ai
-    wall = Wall(screen)
+
+    # Settings.ai.get_shortest_path(food.rect.x, food.rect.y)
+    # Settings.ai.set_new_path()
+    
 
     while True:
         check_events(screen, snake)
         update(screen, snake, food, ai, wall)
-        time.sleep(0.1)
-
+        time.sleep(0.01)
 
 run()
