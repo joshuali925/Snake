@@ -5,9 +5,10 @@ from settings import Settings
 from snake import Snake
 from food import Food
 from ai import Ai
+from wall import Wall
 
 
-def on_init(screen):
+def generate_all_positions(screen):
     for x in range(Settings.snake_speed, Settings.width - Settings.snake_speed, Settings.snake_speed):
         Settings.all_x.append((x - screen.get_rect().centerx) // Settings.snake_speed *
                               Settings.snake_speed + screen.get_rect().centerx)
@@ -36,8 +37,9 @@ def check_events(screen, snake):
             sys.exit()
 
 
-def update(screen, snake, food, ai):
+def update(screen, snake, food, ai, wall):
     screen.fill(Settings.bg_color)
+    wall.update()
     ai.update()
     food.update()
     snake.update()
@@ -48,16 +50,17 @@ def run():
     pygame.init()
     screen = pygame.display.set_mode(Settings.resolution)
     pygame.display.set_caption('Snake')
-    on_init(screen)
+    generate_all_positions(screen)
 
     snake = Snake(screen)
     food = Food(screen, snake)
     ai = Ai(screen, snake, food)
     Settings.ai = ai
+    wall = Wall(screen)
 
     while True:
         check_events(screen, snake)
-        update(screen, snake, food, ai)
+        update(screen, snake, food, ai, wall)
         time.sleep(0.1)
 
 

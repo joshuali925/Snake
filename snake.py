@@ -19,17 +19,18 @@ class Snake():
         self.screen.fill(Settings.snake_head_color, self.body[0])
 
     def update(self):
-        self.direction = self.moves.pop(0) if len(
-            self.moves) > 0 else self.direction
+        self.direction = self.moves.pop(0) if len(self.moves) > 0 else 0
         if self.direction != 0:
             self.check_bounds()
             for i in range(self.length - 1, 0, -1):
                 self.body[i].x = self.body[i - 1].x
                 self.body[i].y = self.body[i - 1].y
-            x, y = self.move(self.body[0].x, self.body[0].y, self.direction)
+            x, y = self.get_move_result(
+                self.body[0].x, self.body[0].y, self.direction)
             self.body[0].x, self.body[0].y = x, y
-        else:
-            Settings.ai.set_new_path()
+        # else:
+        #     Settings.ai.set_new_path()
+        Settings.ai.set_new_path()
         self.draw()
 
     def check_bounds(self):
@@ -60,7 +61,7 @@ class Snake():
     def head_at_point(self, x, y):
         return self.body[0].x == x and self.body[0].y == y
 
-    def move(self, x, y, direction):
+    def get_move_result(self, x, y, direction):
         if direction == 1:
             y -= Settings.snake_speed
         elif direction == 2:
@@ -72,7 +73,7 @@ class Snake():
         return (x, y)
 
     def can_move(self, x, y, direction):
-        next_x, next_y = self.move(x, y, direction)
+        next_x, next_y = self.get_move_result(x, y, direction)
         return next_x >= Settings.all_x[0] and next_x <= Settings.all_x[-1] and next_y >= Settings.all_y[0] and next_y <= Settings.all_y[-1] and not self.at_point(next_x, next_y)
 
     def movable_directions(self, x, y):
