@@ -8,13 +8,14 @@ from ai import Ai
 
 
 def on_init(screen):
-    for x in range(Settings.snake_speed, Settings.width, Settings.snake_speed):
+    for x in range(Settings.snake_speed, Settings.width - Settings.snake_speed, Settings.snake_speed):
         Settings.all_x.append((x - screen.get_rect().centerx) // Settings.snake_speed *
-                            Settings.snake_speed + screen.get_rect().centerx)
-    for y in range(Settings.snake_speed, Settings.height, Settings.snake_speed):
+                              Settings.snake_speed + screen.get_rect().centerx)
+    for y in range(Settings.snake_speed, Settings.height - Settings.snake_speed, Settings.snake_speed):
         Settings.all_y.append((y - screen.get_rect().centery) // Settings.snake_speed *
-                            Settings.snake_speed + screen.get_rect().centery)
+                              Settings.snake_speed + screen.get_rect().centery)
     Settings.num_points_reachable = len(Settings.all_x) * len(Settings.all_y)
+
 
 def check_events(screen, snake):
     for event in pygame.event.get():
@@ -53,7 +54,7 @@ def run():
     food = Food(screen, snake)
     ai = Ai(screen, snake, food)
     Settings.ai = ai
-    
+
     while True:
         check_events(screen, snake)
         update(screen, snake, food, ai)
