@@ -19,7 +19,7 @@ class Snake():
         self.screen.fill(Settings.snake_head_color, self.body[0])
 
     def update(self):
-        Settings.ai.set_new_path()
+        # Settings.ai.set_new_path()
         self.direction = self.moves.pop(0) if len(self.moves) > 0 else 0
         if self.direction != 0:
             self.check_bounds()

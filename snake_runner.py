@@ -58,8 +58,8 @@ def run():
     ai = Ai(screen, snake, food)
     Settings.ai = ai
 
-    # Settings.ai.get_shortest_path(food.rect.x, food.rect.y)
-    # Settings.ai.set_new_path()
+    Settings.ai.get_shortest_path(food.rect.x, food.rect.y)
+    Settings.ai.set_new_path()
     
 
     while True:

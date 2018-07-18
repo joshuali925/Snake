@@ -27,8 +27,8 @@ class Food():
         if self.snake.head_at_point(self.rect.x, self.rect.y):
             self.set_random_point()
             self.snake.grow()
-            # Settings.ai.get_shortest_path(self.rect.x, self.rect.y)
-            # Settings.ai.set_new_path()
+            Settings.ai.get_shortest_path(self.rect.x, self.rect.y)
+            Settings.ai.set_new_path()
         self.screen.fill(Settings.food_color, self.rect)
 
     def get_position(self):
